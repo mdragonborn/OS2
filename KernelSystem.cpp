@@ -46,7 +46,8 @@ Time KernelSystem::periodicJob()
 Status KernelSystem::access(ProcessId pid, VirtualAddress address, AccessType type)
 {
 	Process * process = rgProcSet->get(pid);
-	assert(process);
+	if (!process)
+		return TRAP;
 	return process->pProcess->access(address, type);
 };
 

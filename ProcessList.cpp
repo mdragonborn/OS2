@@ -20,5 +20,9 @@ void ProcSet::remove(int procId) {
 
 Process * ProcSet::get(int procId)
 {
-	return (rgProcMap.find(procId))->second;
+	auto iter = rgProcMap.find(procId);
+	if (iter != rgProcMap.end())
+		return iter->second;
+	else
+		return nullptr;
 }
