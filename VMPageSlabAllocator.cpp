@@ -70,7 +70,11 @@ void VMPGSlabAllocator::removeVictim(KernelProcess * proc)
 	int minimum = 0;
 	for (int i = 0; i < vmSpaceSize; i++)
 	{
-		if (refBits[i] < refBits[minimum] && rgProcess[i]!=proc)
+		if (refBits[i] < refBits[minimum] && rgProcess[i]!=proc 
+#ifdef SHMEM
+			&& !rgProcess[i]->checkShared(vmMapping[i])
+#endif
+			)
 			minimum = i;
 	}
 	//assert(rgProcess[minimum] != proc);
@@ -78,7 +82,7 @@ void VMPGSlabAllocator::removeVictim(KernelProcess * proc)
 	int cluster = pSystem->writeToCluster(START_ADDR(minimum));
 
 	rgProcess[minimum]->setCluster(cluster, vmMapping[minimum]);
-
+	
 	vmMapping[minimum] = 0;
 	rgProcess[minimum] = nullptr;
 	refBits[minimum] = 0;

@@ -83,3 +83,76 @@ int KernelSystem::readAndFreeCluster(unsigned int cluster, char * buffer)
 	else assert(0);
 	return outcome;
 }
+
+#ifdef SHMEM
+
+Process* KernelSystem::cloneProcess(ProcessId pid)
+{
+	Process * proc = rgProcSet->get(pid);
+	return proc->clone(pid);
+	PhysicalAddress * findSharedSegment(const char* name);
+	void createSharedSegment(const char* name);
+	int getRefCount(const char* name);
+}
+
+PhysicalAddress KernelSystem::createSharedSegment(VirtualAddress startAddress, PageNum segmentSize,
+	const char* name, AccessType flags)
+{
+	auto find = shmemMap.find(name);
+	if (find == shmemMap.end())
+	{
+		
+		for (int i = 0; i < segmentSize; i++)
+		{
+			PhysicalAddress segment = VMPGSlabAllocator::allocate((KernelProcess*)0xffffffff, startAddress);
+			shmemMap.insert(std::make_pair(name, segment));
+		}
+		return segment;
+	}
+	else
+		return nullptr;
+}
+
+
+PhysicalAddress KernelSystem::findSharedSegment(const char* name)
+{
+	auto find = shmemMap.find(name);
+	if (find != shmemMap.end())
+	{
+		shmemCountMap[name]++;
+		return find->second;
+	}
+	else return nullptr;
+}
+
+int KernelSystem::detachSharedSegment(const char* name)
+{
+	auto find = shmemMap.find(name);
+	if (find != shmemMap.end())
+	{
+		shmemCountMap[name]--;
+		if (shmemCountMap[name] == 0)
+		{
+			VMPGSlabAllocator::free(find->second);
+			shmemMap.erase(name);
+			shmemCountMap.erase(name);
+			return 1;
+		}
+		else
+			return 0;
+	}
+	else return -1;
+}
+
+int KernelSystem::getRefCount(const char* name)
+{
+	auto find = shmemCountMap.find(name);
+	if (find != shmemCountMap.end())
+	{
+		return shmemCountMap[name];
+	}
+	else
+		return 0;
+}
+
+#endif

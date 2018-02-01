@@ -3,6 +3,8 @@
 
 #include "assert.h"
 
+#define SHMEM
+
 // File: vm_declarations.h
 typedef unsigned long PageNum;
 typedef unsigned long VirtualAddress;

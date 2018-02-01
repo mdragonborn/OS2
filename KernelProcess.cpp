@@ -67,7 +67,7 @@ Status KernelProcess::createSegment(VirtualAddress startAddress, PageNum segment
 		rgPmt1[pmt1entry]->pmt2[pmt2entry].free = false;
 		rgPmt1[pmt1entry]->pmt2[pmt2entry].allocated = true;
 
-		rgPmt1[pmt1entry]->pmt2[pmt2entry].rwx = flags;
+		rgPmt1[pmt1entry]->pmt2[pmt2entry].rwx(flags);
 
 	}	
 	return OK;
@@ -130,7 +130,7 @@ Status KernelProcess::access(VirtualAddress address, AccessType flags)
 
 	if (rgPmt1[pmt1entry]->pmt2)
 	{
-		AccessType rights = rgPmt1[pmt1entry]->pmt2[pmt2entry].rwx;
+		AccessType rights = rgPmt1[pmt1entry]->pmt2[pmt2entry].rwx();
 		if (rgPmt1[pmt1entry]->pmt2[pmt2entry].free == false && rgPmt1[pmt1entry]->pmt2[pmt2entry].allocated == true
 			&& (rights == flags || (rights == READ_WRITE && (flags == READ || flags == WRITE))))
 		{
@@ -186,6 +186,7 @@ PhysicalAddress KernelProcess::getPhysicalAddress(VirtualAddress address)
 
 void KernelProcess::initPMT2Entry(int pmt1entry, int pmt2entry) {
 	rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr = nullptr;
+	rgPmt1[pmt1entry]->pmt2[pmt2entry].shmemAddr = nullptr;
 	rgPmt1[pmt1entry]->pmt2[pmt2entry].free = true;
 	rgPmt1[pmt1entry]->pmt2[pmt2entry].allocated = false;
 	rgPmt1[pmt1entry]->pmt2[pmt2entry].cluster = -1;
@@ -198,6 +199,7 @@ void KernelProcess::initPMT2(int pmt1entry)
 	for (int i = 0; i < 64; i++)
 	{
 		rgPmt1[pmt1entry]->pmt2[i].physicalAddr = nullptr;
+		rgPmt1[pmt1entry]->pmt2[i].shmemAddr = nullptr;
 		rgPmt1[pmt1entry]->pmt2[i].free = true;
 		rgPmt1[pmt1entry]->pmt2[i].allocated = false;
 		rgPmt1[pmt1entry]->pmt2[i].cluster = -1;
@@ -218,3 +220,28 @@ void KernelProcess::setCluster(int cluster, VirtualAddress address)
 	rgPmt1[PMT1ENTRY(address)]->pmt2[PMT2ENTRY(address)].cluster = cluster;
 	rgPmt1[PMT1ENTRY(address)]->pmt2[PMT2ENTRY(address)].physicalAddr = 0;
 }
+
+#ifdef SHMEM
+
+Process* KernelProcess::clone(ProcessId pid) 
+{
+
+}
+
+Status KernelProcess::createSharedSegment(VirtualAddress startAddress,PageNum segmentSize, 
+	const char* name, AccessType flags) 
+{
+	
+}
+
+Status KernelProcess::disconnectSharedSegment(const char* name) 
+{
+
+}
+
+Status KernelProcess::deleteSharedSegment(const char* name) 
+{
+
+}
+
+#endif

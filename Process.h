@@ -18,6 +18,16 @@ public:
 	Status deleteSegment(VirtualAddress startAddress);
 	Status pageFault(VirtualAddress address);
 	PhysicalAddress getPhysicalAddress(VirtualAddress address);
+
+#ifdef SHMEM
+	Process* clone(ProcessId pid);
+	Status createSharedSegment(VirtualAddress startAddress,
+		PageNum segmentSize, const char* name, AccessType flags);
+	Status disconnectSharedSegment(const char* name);
+	Status deleteSharedSegment(const char* name);
+#endif
+	
+
 private:
 	KernelProcess *pProcess;
 	friend class System;

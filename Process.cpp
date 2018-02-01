@@ -36,3 +36,13 @@ PhysicalAddress Process::getPhysicalAddress(VirtualAddress address)
 {
 	return pProcess->getPhysicalAddress(address);
 };
+
+#ifdef SHMEM
+
+Process* Process::clone(ProcessId pid) {}
+Status Process::createSharedSegment(VirtualAddress startAddress,
+	PageNum segmentSize, const char* name, AccessType flags) {}
+Status Process::disconnectSharedSegment(const char* name) {}
+Status Process::deleteSharedSegment(const char* name) {}
+
+#endif

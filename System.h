@@ -17,6 +17,9 @@ public:
 	Time periodicJob();
 	// Hardware job
 	Status access(ProcessId pid, VirtualAddress address, AccessType type);
+#ifdef SHMEM
+	Process* cloneProcess(ProcessId pid);
+#endif
 private:
 	KernelSystem *pSystem;
 	friend class Process;

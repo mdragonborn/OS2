@@ -5,5 +5,23 @@ c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(
 c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(160): warning C4101: 'result': unreferenced local variable
 c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(158): warning C4101: 'clusterNumber': unreferenced local variable
 c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(159): warning C4101: 'outcome': unreferenced local variable
+  Generating Code...
+  Compiling...
+  VMPageSlabAllocator.cpp
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\vmpageslaballocator.cpp(25): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\vmpageslaballocator.cpp(38): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\vmpageslaballocator.cpp(45): warning C4309: '=': truncation of constant value
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\vmpageslaballocator.cpp(57): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\vmpageslaballocator.cpp(71): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\vmpageslaballocator.cpp(91): warning C4018: '<': signed/unsigned mismatch
+  Process.cpp
+  PMTSlabAlloc.cpp
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\pmtslaballoc.cpp(15): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\pmtslaballoc.cpp(22): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\pmtslaballoc.cpp(39): warning C4018: '<': signed/unsigned mismatch
+  KernelSystem.cpp
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  System.cpp
   OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.exe
   OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.pdb (Partial PDB)

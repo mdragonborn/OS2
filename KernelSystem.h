@@ -2,7 +2,7 @@
 #define _KERNSYS_H_
 
 #include "vm_declarations.h"
-
+#include <map>
 
 class Process;
 class ProcSet;
@@ -20,8 +20,21 @@ public:
 	Status access(ProcessId pid, VirtualAddress address, AccessType type);
 	int writeToCluster(PhysicalAddress address);
 	int readAndFreeCluster(unsigned int cluster, char * buffer);
-private:
+#ifdef SHMEM
+	Process* cloneProcess(ProcessId pid);
+#endif
 
+private:
+#ifdef SHMEM
+	PhysicalAddress findSharedSegment(const char* name);
+	PhysicalAddress createSharedSegment(VirtualAddress startAddress, PageNum segmentSize,
+		const char* name, AccessType flags);
+	int getRefCount(const char* name);
+	int detachSharedSegment(const char* name);
+	std::map<const char*, PhysicalAddress> shmemMap; //TODO
+	std::map<const char*, int> shmemCountMap; //TODO
+
+#endif
 	KernelSystem *pSystem;
 	Partition * pPartition;
 	int * diskSlots;
