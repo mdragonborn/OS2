@@ -49,3 +49,5 @@ Temporary Items
 *.obj
 Debug/vc140.idb
 *.pdb
+*.log
+disk1.dat
