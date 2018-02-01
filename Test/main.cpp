@@ -10,8 +10,8 @@
 #include "SystemTest.h"
 
 #define VM_SPACE_SIZE (10000)
-#define PMT_SPACE_SIZE (3000)
-#define N_PROCESS (5)
+#define PMT_SPACE_SIZE (6000)
+#define N_PROCESS (15)
 #define PERIODIC_JOB_COST (1)
 
 PhysicalAddress alignPointer(PhysicalAddress address) {

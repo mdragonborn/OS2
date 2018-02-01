@@ -19,7 +19,7 @@ public:
 	// Hardware job
 	Status access(ProcessId pid, VirtualAddress address, AccessType type);
 	int writeToCluster(PhysicalAddress address);
-	int readAndFreeCluster(unsigned int cluster, PhysicalAddress * buffer);
+	int readAndFreeCluster(unsigned int cluster, char * buffer);
 private:
 
 	KernelSystem *pSystem;

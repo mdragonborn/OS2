@@ -1,5 +1,9 @@
-﻿  main.cpp
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\test\main.cpp(30): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\test\main.cpp(34): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+﻿  KernelProcess.cpp
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(39): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(65): warning C4806: '!=': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(82): warning C4018: '<': signed/unsigned mismatch
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(160): warning C4101: 'result': unreferenced local variable
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(158): warning C4101: 'clusterNumber': unreferenced local variable
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(159): warning C4101: 'outcome': unreferenced local variable
   OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.exe
   OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.pdb (Partial PDB)

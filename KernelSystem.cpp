@@ -73,7 +73,7 @@ int KernelSystem::writeToCluster(PhysicalAddress address)
 	}
 }
 
-int KernelSystem::readAndFreeCluster(unsigned int cluster, PhysicalAddress * buffer)
+int KernelSystem::readAndFreeCluster(unsigned int cluster, char * buffer)
 {
 	int outcome;
 	assert(cluster > 0 && cluster < pPartition->getNumOfClusters());

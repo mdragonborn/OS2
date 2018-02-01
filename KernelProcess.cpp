@@ -167,9 +167,9 @@ Status KernelProcess::pageFault(VirtualAddress address)
 	if( pSystem->pPartition->readCluster(rgPmt1[pmt1entry]->pmt2[pmt2entry].cluster, 
 		buffer) ==0 )
 		return TRAP;
-	
-	rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr = buffer;
-	rgPmt1[pmt1entry]->pmt2[pmt2entry].cluster = -1;
+		pSystem->diskSlots[rgPmt1[pmt1entry]->pmt2[pmt2entry].cluster]=0;
+		rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr = buffer;
+		rgPmt1[pmt1entry]->pmt2[pmt2entry].cluster = -1;
 	
 	return OK;
 };
