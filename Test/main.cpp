@@ -3,15 +3,15 @@
 #include <memory>
 #include <iostream>
 #include <thread>
-#include "System.h"
-#include "part.h"
-#include "vm_declarations.h"
+#include "..\System.h"
+#include "..\part.h"
+#include "..\vm_declarations.h"
 #include "ProcessTest.h"
 #include "SystemTest.h"
 
 #define VM_SPACE_SIZE (10000)
 #define PMT_SPACE_SIZE (3000)
-#define N_PROCESS (2)
+#define N_PROCESS (5)
 #define PERIODIC_JOB_COST (1)
 
 PhysicalAddress alignPointer(PhysicalAddress address) {

@@ -5,7 +5,7 @@
 #include "RandomNumberGenerator.h"
 #include "SystemTest.h"
 
-#define POWER_OF_NUMBER_OF_INSTRUCTIONS (15)
+#define POWER_OF_NUMBER_OF_INSTRUCTIONS (5)
 
 ProcessTest::ProcessTest(System &system, SystemTest &systemTest_) : systemTest(systemTest_), finished(false) {
     process = system.createProcess();

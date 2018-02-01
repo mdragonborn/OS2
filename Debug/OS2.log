@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\test\main.cpp(30): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+c:\users\milena\documents\visual studio 2015\projects\os2\os2\test\main.cpp(34): warning C4244: 'initializing': conversion from 'uint64_t' to 'unsigned int', possible loss of data
+  OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.exe
+  OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.pdb (Partial PDB)

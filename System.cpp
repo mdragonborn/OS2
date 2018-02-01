@@ -14,7 +14,7 @@ System::~System()
 };
 Process* System::createProcess()
 {
-	pSystem->createProcess();
+	return pSystem->createProcess();
 };
 Time System::periodicJob()
 {

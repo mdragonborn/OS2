@@ -5,13 +5,14 @@
 
 class PMTSlabAlloc {
 public:
-	static PhysicalAddress pmtSpace;
-	static PageNum pmtSpaceSize;
-	static int * freeBit;
 	static void initSlab(PhysicalAddress address, PageNum num);
 	static PhysicalAddress allocate();
 	static void free(PhysicalAddress address);
+	static void finalize();
 private:
+	static PhysicalAddress pmtSpace;
+	static PageNum pmtSpaceSize;
+	static int * freeBit;
 	PMTSlabAlloc() {};
 };
 

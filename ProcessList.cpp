@@ -1,23 +1,24 @@
 
 #include "ProcessList.h"
 #include "Process.h"
+#include <map>
 
-bool PMTSet::insert(Process * proc, PMTable * table)
+bool ProcSet::insert(Process * proc)
 {
-	if (map.find(proc->getProcessId()) == map.end())
+	if (rgProcMap.find(proc->getProcessId()) == rgProcMap.end())
 	{
-		map.insert(std::make_pair(proc->getProcessId(), table));
+		rgProcMap.insert(std::make_pair(proc->getProcessId(), proc));
 		return true;
 	}
 	else
 		return false;
 }
 
-void PMTSet::remove(int procId) {
-	map.erase(procId);
+void ProcSet::remove(int procId) {
+	rgProcMap.erase(procId);
 }
 
-PMTable * PMTSet::get(int procId)
+Process * ProcSet::get(int procId)
 {
-	return (*(map.find(procId))).second;
+	return (rgProcMap.find(procId))->second;
 }

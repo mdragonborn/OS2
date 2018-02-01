@@ -1,5 +1,11 @@
 
 #include "KernelSystem.h"
+#include "VMPageSlabAllocator.h"
+#include "PMTSlabAlloc.h"
+#include "ProcessList.h"
+#include "Process.h"
+#include <assert.h>
+#include "part.h"
 
 int KernelSystem::pidGenerator=1;
 
@@ -8,29 +14,71 @@ KernelSystem::KernelSystem(PhysicalAddress processVMSpace, PageNum processVMSpac
 	Partition* partition)
 {
 	this->pPartition = partition;
-
+	VMPGSlabAllocator::initSlab(processVMSpace, processVMSpaceSize, this);
+	PMTSlabAlloc::initSlab(pmtSpace, pmtSpaceSize);
+	rgProcSet = new ProcSet;
+	diskSlots = new int[pPartition->getNumOfClusters()];
+	for (unsigned int i = 0; i < pPartition->getNumOfClusters(); i++)
+		diskSlots[i] = 0;
 };
 
 KernelSystem::~KernelSystem() 
 {
-
+	VMPGSlabAllocator::finalize();
+	PMTSlabAlloc::finalize();
 };
 
 Process* KernelSystem::createProcess()
 {
 	Process * proc = new Process(pidGenerator++);
-	PMTable * table = new PMTable();
 	proc->pProcess->pSystem = this;
-	pmts.insert(proc, table);
+	rgProcSet->insert(proc);
+
 	return proc;
 };
 
 Time KernelSystem::periodicJob()
 {
-	//tick
+	VMPGSlabAllocator::tick();
+	return 260;
 };
 // Hardware job
-Status access(ProcessId pid, VirtualAddress address, AccessType type)
+Status KernelSystem::access(ProcessId pid, VirtualAddress address, AccessType type)
 {
-
+	Process * process = rgProcSet->get(pid);
+	assert(process);
+	return process->pProcess->access(address, type);
 };
+
+int KernelSystem::writeToCluster(PhysicalAddress address)
+{
+	unsigned int i;
+	for (i = 0; i < pPartition->getNumOfClusters(); i++)
+		if (diskSlots[i] == 0) break;
+	if (pPartition->getNumOfClusters() == i) assert(0); //TODO
+	if (address != nullptr)
+	{
+		if (pPartition->writeCluster(i, (const char *)address))
+		{
+			diskSlots[i] = 1;
+			return i;
+		}
+		else
+			return -1;
+	}
+	else
+	{
+		diskSlots[i] = 1;
+		return i;
+	}
+}
+
+int KernelSystem::readAndFreeCluster(unsigned int cluster, PhysicalAddress * buffer)
+{
+	int outcome;
+	assert(cluster > 0 && cluster < pPartition->getNumOfClusters());
+	if ((outcome=pPartition->readCluster(cluster, (char *)buffer)) == 1)
+		diskSlots[cluster] = 0;
+	else assert(0);
+	return outcome;
+}

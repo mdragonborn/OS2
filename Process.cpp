@@ -21,7 +21,7 @@ Status Process::createSegment(VirtualAddress startAddress, PageNum segmentSize,
 Status Process::loadSegment(VirtualAddress startAddress, PageNum segmentSize,
 	AccessType flags, void* content)
 {
-	return pProcess->loadSegment(startAddress, segmentSize, flags);
+	return pProcess->loadSegment(startAddress, segmentSize, flags, content);
 };
 Status Process::deleteSegment(VirtualAddress startAddress)
 {

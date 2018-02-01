@@ -36,12 +36,6 @@
     <ClInclude Include="KernelProcess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ProcessList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PMTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="PMTSlabAlloc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -52,6 +46,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Test\ProcessTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="VMPageSlabAllocator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcessList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -71,9 +71,6 @@
     <ClCompile Include="PMTSlabAlloc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PMTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Test\RandomNumberGenerator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ProcessList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VMPageSlabAllocator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

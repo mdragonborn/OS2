@@ -1,5 +1,9 @@
 
 #include "PMTSlabAlloc.h"
+#include "KernelProcess.h"
+PhysicalAddress PMTSlabAlloc::pmtSpace=0;
+PageNum PMTSlabAlloc::pmtSpaceSize=0;
+int * PMTSlabAlloc::freeBit=0;
 
 void PMTSlabAlloc::initSlab(PhysicalAddress address, PageNum num)
 {
@@ -19,9 +23,9 @@ PhysicalAddress PMTSlabAlloc::allocate()
 		if (freeBit[i] == 0) break;
 	if (i != pmtSpaceSize)
 	{
-		ret =(void*)((long)pmtSpace + i * PAGE_SIZE);
-		for (int i = 0; i < PAGE_SIZE/sizeof(long); i++)
-			((long*)(ret))[i] = 0;
+		ret =(PMT2*)pmtSpace+i;
+		for (int i = 0; i < PAGE_SIZE; i++)
+			((int*)(ret))[i] = 0;
 		freeBit[i] = 1;
 	}
 	else ret = nullptr;
@@ -35,3 +39,8 @@ void PMTSlabAlloc::free(PhysicalAddress address)
 	assert(pageNum > 0 && pageNum < pmtSpaceSize);
 	freeBit[pageNum] = 0;
 };
+
+void PMTSlabAlloc::finalize()
+{
+	delete freeBit;
+}

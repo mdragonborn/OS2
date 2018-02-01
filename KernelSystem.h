@@ -2,11 +2,12 @@
 #define _KERNSYS_H_
 
 #include "vm_declarations.h"
-#include "part.h"
-#include "Process.cpp"
-#include "ProcessList.h"
+
 
 class Process;
+class ProcSet;
+class Partition;
+
 class KernelSystem {
 public:
 	KernelSystem(PhysicalAddress processVMSpace, PageNum processVMSpaceSize,
@@ -17,12 +18,14 @@ public:
 	Time periodicJob();
 	// Hardware job
 	Status access(ProcessId pid, VirtualAddress address, AccessType type);
+	int writeToCluster(PhysicalAddress address);
+	int readAndFreeCluster(unsigned int cluster, PhysicalAddress * buffer);
 private:
 
 	KernelSystem *pSystem;
 	Partition * pPartition;
-	PMTSet pmts;
-
+	int * diskSlots;
+	ProcSet * rgProcSet;
 	static int pidGenerator;
 	friend class Process;
 	friend class KernelProcess;

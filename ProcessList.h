@@ -1,21 +1,14 @@
+#pragma once
 
-#ifndef _PROCLIST_H_
-#define _PROCLIST_H_
-
-#include "PMTable.h"
 #include <map>
-
 class Process;
+typedef unsigned ProcessId;
 
-class PMTSet
-{
+class ProcSet {
 private:
-	std::map<ProcessId,PMTable*> map;
+	std::map<const ProcessId,Process*> rgProcMap;
 public:
-	bool insert(Process * proc, PMTable * table);
+	bool insert(Process * proc);
 	void remove(int procId);
-	PMTable * get(int procId);
-
+	Process * get(int procId);
 };
-
-#endif
