@@ -21,6 +21,7 @@
 
 // File: Process.h
 #include "vm_declarations.h"
+#include <map>
 
 class System;
 class KernelSystem;
@@ -79,7 +80,7 @@ public:
 	Process* clone(ProcessId pid);
 	Status createSharedSegment(VirtualAddress startAddress,
 		PageNum segmentSize, const char* name, AccessType flags);
-	Status disconnectSharedSegment(const char* name);
+	Status disconnectSharedSegment(const char* name, bool del=false);
 	Status deleteSharedSegment(const char* name);
 #endif
 
@@ -94,6 +95,8 @@ private:
 
 #ifdef SHMEM
 	bool checkShared(VirtualAddress vadr);
+	std::map<const char *, VirtualAddress> usedShmem;
+	VirtualAddress getShmemStart(const char * name);
 #endif
 
 	void initPMT2Entry(int pmt1entry, int pmt2entry);

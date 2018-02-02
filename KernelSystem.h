@@ -3,10 +3,20 @@
 
 #include "vm_declarations.h"
 #include <map>
+#include <set>
 
 class Process;
 class ProcSet;
 class Partition;
+class KernelProcess;
+
+#ifdef SHMEM
+struct ShmemDescriptor
+{
+	PageNum size;
+	std::set<KernelProcess *> pContainingProcess;
+};
+#endif
 
 class KernelSystem {
 public:
@@ -26,22 +36,22 @@ public:
 
 private:
 #ifdef SHMEM
-	PhysicalAddress findSharedSegment(const char* name);
-	PhysicalAddress createSharedSegment(VirtualAddress startAddress, PageNum segmentSize,
-		const char* name, AccessType flags);
+	ShmemDescriptor* findSharedSegment(const char* name);
+	void addSharedSegment(const char * name, ShmemDescriptor* desc);
 	int getRefCount(const char* name);
-	int detachSharedSegment(const char* name);
-	std::map<const char*, PhysicalAddress> shmemMap; //TODO
-	std::map<const char*, int> shmemCountMap; //TODO
-
+	void removeSharedSegment(const char* name);
+	std::map<const char*, ShmemDescriptor*> shmemMap; //TODO
+	void addShmem(ShmemDescriptor);
 #endif
 	KernelSystem *pSystem;
 	Partition * pPartition;
-	int * diskSlots;
+	int * rgDiskSlots;
 	ProcSet * rgProcSet;
 	static int pidGenerator;
 	friend class Process;
 	friend class KernelProcess;
 };
 
-#endif
+
+
+#endif //_KERNSYS_H_

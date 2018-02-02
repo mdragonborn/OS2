@@ -72,7 +72,7 @@ void VMPGSlabAllocator::removeVictim(KernelProcess * proc)
 	{
 		if (refBits[i] < refBits[minimum] && rgProcess[i]!=proc 
 #ifdef SHMEM
-			&& !rgProcess[i]->checkShared(vmMapping[i])
+			&& vmMapping[i]==0xffffffff
 #endif
 			)
 			minimum = i;

@@ -39,10 +39,18 @@ PhysicalAddress Process::getPhysicalAddress(VirtualAddress address)
 
 #ifdef SHMEM
 
-Process* Process::clone(ProcessId pid) {}
+Process* Process::clone(ProcessId pid) {
+	return pProcess->clone(pid);
+}
 Status Process::createSharedSegment(VirtualAddress startAddress,
-	PageNum segmentSize, const char* name, AccessType flags) {}
-Status Process::disconnectSharedSegment(const char* name) {}
-Status Process::deleteSharedSegment(const char* name) {}
+	PageNum segmentSize, const char* name, AccessType flags) {
+	return pProcess->createSharedSegment(startAddress, segmentSize, name, flags);
+}
+Status Process::disconnectSharedSegment(const char* name) {
+	return pProcess->disconnectSharedSegment(name);
+}
+Status Process::deleteSharedSegment(const char* name) {
+	return pProcess->deleteSharedSegment(name);
+}
 
 #endif
