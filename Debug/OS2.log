@@ -1,16 +1,2 @@
-﻿  KernelProcess.cpp
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(39): warning C4018: '<': signed/unsigned mismatch
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(65): warning C4806: '!=': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(82): warning C4018: '<': signed/unsigned mismatch
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(168): warning C4101: 'result': unreferenced local variable
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(166): warning C4101: 'clusterNumber': unreferenced local variable
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(167): warning C4101: 'outcome': unreferenced local variable
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(248): warning C4800: 'char': forcing value to bool 'true' or 'false' (performance warning)
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(282): warning C4018: '<': signed/unsigned mismatch
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(297): warning C4018: '<': signed/unsigned mismatch
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(321): warning C4018: '<': signed/unsigned mismatch
-c:\users\milena\documents\visual studio 2015\projects\os2\os2\kernelprocess.cpp(342): warning C4018: '<': signed/unsigned mismatch
-part.lib(part.obj) : warning LNK4099: PDB 'part.pdb' was not found with 'part.lib(part.obj)' or at 'C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\part.pdb'; linking object as if no debug info
-part.lib(PartitionImpl.obj) : warning LNK4099: PDB 'part.pdb' was not found with 'part.lib(PartitionImpl.obj)' or at 'C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\part.pdb'; linking object as if no debug info
-  OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.exe
+﻿  OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.exe
   OS2.vcxproj -> C:\Users\Milena\documents\visual studio 2015\Projects\OS2\Debug\OS2.pdb (Partial PDB)

@@ -33,7 +33,17 @@ ProcessId KernelProcess::getProcessId() const
 Status KernelProcess::createSegment(VirtualAddress startAddress, PageNum segmentSize,
 	AccessType flags)
 {
-
+	if (startAddress%PAGE_SIZE) return TRAP;
+	int tempStartAddress = startAddress;
+	for (int i = 0; i < segmentSize; i++, tempStartAddress += PAGE_SIZE)
+	{
+		int pmt1entry = PMT1ENTRY(tempStartAddress);
+		int pmt2entry = PMT2ENTRY(tempStartAddress);
+		if (rgPmt1[pmt1entry] != nullptr)
+			if (rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr!=nullptr 
+				|| rgPmt1[pmt1entry]->pmt2[pmt2entry].cluster!=-1 
+				|| rgPmt1[pmt1entry]->pmt2[pmt2entry].shmemAddr!=nullptr) return TRAP;
+	}
 	int level2tables = (segmentSize / 64) + ((segmentSize % 64) ? 1 : 0);
 	int left = segmentSize;
 	for (int i = 0; i < segmentSize; i++, startAddress += PAGE_SIZE)
@@ -110,9 +120,10 @@ Status KernelProcess::deleteSegment(VirtualAddress startAddress)
 	if (rgPmt1[pmt1entry]->pmt2)
 	{
 #ifdef SHMEM
-		assert(rgPmt1[pmt1entry]->pmt2[pmt2entry].shmemAddr != 0);
+		assert(rgPmt1[pmt1entry]->pmt2[pmt2entry].shmemAddr == 0);
 #endif
-		VMPGSlabAllocator::free(rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr);
+		if(rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr)
+			VMPGSlabAllocator::free(rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr);
 		rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr = nullptr;
 		rgPmt1[pmt1entry]->pmt2[pmt2entry].free = true;
 
@@ -189,6 +200,10 @@ PhysicalAddress KernelProcess::getPhysicalAddress(VirtualAddress address)
 	if (rgPmt1[pmt1entry])
 		if (rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr)
 			return (void*)((long)(rgPmt1[pmt1entry]->pmt2[pmt2entry].physicalAddr)+(address&OFFSMASK));
+#ifdef SHMEM
+		else if (rgPmt1[pmt1entry]->pmt2[pmt2entry].shmemAddr)
+			return (void*)((long)(rgPmt1[pmt1entry]->pmt2[pmt2entry].shmemAddr) + (address&OFFSMASK));
+#endif
 	return nullptr;
 };
 
@@ -281,23 +296,36 @@ Status KernelProcess::createSharedSegment(VirtualAddress startAddress,PageNum se
 
 		for (int i = 0; i < segmentSize; i++)
 		{
+			//init pmt2
 			int pmt1ent = PMT1ENTRY(startAddress + i);
 			int pmt2ent = PMT2ENTRY(startAddress + i);
+			int pmt1ent2 = PMT1ENTRY(contStartAddress + i);
+			int pmt2ent2 = PMT2ENTRY(contStartAddress + i);
+			int cluster;
 			PhysicalAddress pa = proc->getPhysicalAddress(contStartAddress + i);
-			assert(pa);
-			VMPGSlabAllocator::free(rgPmt1[pmt1ent]->pmt2[pmt2ent].physicalAddr);
+			assert(pa || (proc->rgPmt1[pmt1ent2] && (cluster=proc->rgPmt1[pmt1ent2]->pmt2[pmt2ent2].cluster!=-1)));
+			if (rgPmt1[pmt1ent]->pmt2[pmt2ent].physicalAddr != nullptr)
+				VMPGSlabAllocator::free(rgPmt1[pmt1ent]->pmt2[pmt2ent].physicalAddr);
 			rgPmt1[pmt1ent]->pmt2[pmt2ent].physicalAddr = nullptr;
-			rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr = pa;
+			if(pa)
+				rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr = pa;
+			else
+			{
+				rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr = nullptr;
+				rgPmt1[pmt1ent]->pmt2[pmt2ent].cluster = proc->rgPmt1[pmt1ent2]->pmt2[pmt2ent2].cluster;
+			}
 		}
 		original->pContainingProcess.insert(this);
 		usedShmem.insert(std::make_pair(name, startAddress));
 	}
 	else
 	{
+		createSegment(startAddress, segmentSize, flags);
 		for (int i = 0; i < segmentSize; i++)
 		{
-			int pmt1ent = PMT1ENTRY(startAddress + i);
-			int pmt2ent = PMT2ENTRY(startAddress + i);
+			int pmt1ent = PMT1ENTRY(startAddress + i*PAGE_SIZE);
+			int pmt2ent = PMT2ENTRY(startAddress + i*PAGE_SIZE);
+			
 			rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr = rgPmt1[pmt1ent]->pmt2[pmt2ent].physicalAddr;
 			rgPmt1[pmt1ent]->pmt2[pmt2ent].physicalAddr = nullptr;
 		}
@@ -323,7 +351,12 @@ Status KernelProcess::disconnectSharedSegment(const char* name, bool del)
 		int pmt1ent = PMT1ENTRY(startAddress + i);
 		int pmt2ent = PMT2ENTRY(startAddress + i);
 		if (del)
-			VMPGSlabAllocator::free(rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr);
+		{
+			if (rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr)
+				VMPGSlabAllocator::free(rgPmt1[pmt1ent]->pmt2[pmt2ent].shmemAddr);
+			else
+				pSystem->rgDiskSlots[rgPmt1[pmt1ent]->pmt2[pmt2ent].cluster] = 0;
+		}
 
 		rgPmt1[pmt1ent]->pmt2[pmt1ent].shmemAddr = 0;
 		rgPmt1[pmt1ent]->pmt2[pmt1ent].allocated = false;
@@ -338,6 +371,8 @@ Status KernelProcess::disconnectSharedSegment(const char* name, bool del)
 Status KernelProcess::deleteSharedSegment(const char* name) 
 {
 	ShmemDescriptor * desc = pSystem->findSharedSegment(name);
+	if (desc == nullptr) 
+		return TRAP;
 	int i=0;
 	for (auto iter = desc->pContainingProcess.begin(); i < desc->pContainingProcess.size() - 1; iter++, i++)
 		(*iter)->disconnectSharedSegment(name);

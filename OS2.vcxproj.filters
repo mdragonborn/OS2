@@ -71,22 +71,13 @@
     <ClCompile Include="PMTSlabAlloc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Test\RandomNumberGenerator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\SystemTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Test\ProcessTest.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ProcessList.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VMPageSlabAllocator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Downloads\testovi\testovi\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

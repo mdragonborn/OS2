@@ -35,7 +35,7 @@ PhysicalAddress VMPGSlabAllocator::allocate(KernelProcess * proc, VirtualAddress
 	int i = 0;
 	PhysicalAddress ret;
 	//TODO clock handle
-	for (i = 0; i < vmSpaceSize && vmMapping[i] != 0; i++);
+	for (i = 0; i < vmSpaceSize && rgProcess[i] != nullptr; i++);
 
 	if(count!=0)
 	{
@@ -92,7 +92,7 @@ void VMPGSlabAllocator::removeVictim(KernelProcess * proc)
 void VMPGSlabAllocator::free(PhysicalAddress address) 
 {
 	int pageNum = ((long)address - (long)vmSpace) / PAGE_SIZE;
-	assert(pageNum > 0 && pageNum < vmSpaceSize);
+	assert(pageNum >= 0 && pageNum < vmSpaceSize);
 	rgProcess[pageNum] = nullptr;
 	refBits[pageNum] = 0;
 	count++;
